@@ -1,0 +1,14 @@
+{
+  "name": "nomad-typescript",
+  "version": "1.0.0",
+  "description": "타입스크립트를 이용하는 가장 큰 이유는 안정성( 타입 안정성 )",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
