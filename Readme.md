@@ -768,22 +768,47 @@ makeUser({
 ### typescript설치
 
 npm i -D typescript
+<br>
 
 ### package.json 초기화
 
 npm init -y
+<br>
 
 ### tsconfig.json설정
 
 디렉터리에 tsconfig.json 파일이 있으면 해당 디렉터리가 TypeScript 프로젝트의 루트임을 나타냅니다. tsconfig.json 파일은 프로젝트를 컴파일하는 데 필요한 루트 파일과 컴파일러 옵션을 지정합니다.
 https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#handbook-content
+<br>
 
 ### Target (기본값: ES3)
 
 최신 브라우저는 모든 ES6 기능을 지원하므로 ES6는 좋은 선택입니다. 코드가 이전 환경에 배포된 경우 더 낮은 target을 설정하거나 최신 환경에서 코드 실행이 보장되는 경우 더 높은 target을 설정하도록 선택할 수 있습니다.
 ex) 화살표 함수() => this는 ES5 이하이면 함수 표현식으로 바뀝니다.
+<br>
+<br>
 
-### JSDoc
+## 프로젝트를 타입스크립트로 만들기
+
+### 1. 파일 전체를 위한 타입 정의 생성(myPackage.d.ts)
+
+정의파일<br>
+호출 시그니처, 타입 작성 (구현 X)
+
+```js
+interface Config {
+  url: string;
+}
+declare module "myPackage" {
+  function init(config: Config): boolean;
+  function exit(code: number): number;
+}
+```
+
+<br>
+<br>
+
+### 2. JSDoc
 
 함수 바로위에 코멘트
 코멘트를 제대로 작성하면 타입스크립트가 코멘트를 읽을 수 있음
@@ -812,4 +837,107 @@ export function init(config) {
 export function exit(code) {
   return code + 1;
 }
+```
+
+### ts-node
+
+빌드 없이 타입스크립트를 실행할 수 있게 해줌
+빌드 없이 빠르게 새로고침하고 싶을 때 사용
+
+<br>
+패키지 설치 
+```
+npm i -D ts-node
+```
+
+```js
+// package.json
+"scripts": {
+  "build": "tsc",
+  "dev": "ts-node src/index",
+  "start": "node build/index.js"
+}
+```
+
+- nodemon 설치했을 경우
+
+```
+npm i nodemon
+```
+
+```js
+// package.json
+"scripts": {
+  "build": "tsc",
+  "dev": "nodemon --exec ts-node src/index.ts",
+  "start": "node build/index.js"
+}
+```
+
+<br>
+
+실행 명령어
+
+```
+npm run dev
+```
+
+<br>
+<br>
+
+- 기존 빌드 방식
+
+```js
+// package.json
+"scripts": {
+  "build": "tsc",
+  "start": "node build/index.js"
+}
+```
+
+```
+npm build && npm start
+```
+
+## 모듈 가져오는 방법
+
+### 1. import \* as 패키지 from '경로'
+
+```js
+import * as crypto from "crypto";
+```
+
+### 2. tsconfig 파일 내 rule 추가
+
+```js
+// tsconfig.json
+
+"compilerOptions": {
+    "esModuleInterop": true,
+    "module": "CommonJS"
+  }
+```
+
+<br>
+<hr>
+<br>
+
+## 타입스크립트로 작성되지 않은 패키지 import 할 때 나타나는 오류
+
+(타입 정의가 되어있지 않을 때)
+
+definitelyTyped
+https://github.com/DefinitelyTyped/DefinitelyTyped
+
+여러 개발자들이 타입을 미리 정의 해놓은 레포지토리
+
+<br>
+<br>
+
+```
+npm i -D @types/node
+```
+
+```
+npm i -D @types/패키지명
 ```
